@@ -1,4 +1,4 @@
-    % 參數設定
+ % 參數設定
 tf = 0.28;     % m
 Lf = 2;        % m
 Lj = 0.5;      % m
@@ -6,10 +6,10 @@ Ls = 3;        % m
 theta_fs = 50; % 度
 alphas = [1, 1/2, 1/3];  % alpha 的值
 theta_as = linspace(-30, 30, 10000);  % degrees
-m = 1.40;
-n = 3.49;
-p = 1.31;
-q = 4.14;
+m = 1.56;
+n = 4.19;
+p = 1.57;
+q = 4.43;
 
 figure;
 hold on;
