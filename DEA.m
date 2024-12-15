@@ -42,12 +42,8 @@ i = 1;
 % run('interactive.m');
 load('interactive_result_st1.mat','Interactive');
 
-% 初始化第一個位置
-x_positions(1) = 0;
-z_positions(1) = 0;
-
 % 主循環
-while theta_f ~= 0 && i <= 700
+while theta_f > 0.01 && i <= 800
     fprintf('---------------------------------------------------------------------\n');
     fprintf('這是第 %d 次迴圈 \n', i);
     fprintf('theta_f = %.4f, theta_a = %.4f, Za = %.4f\n',  theta_f, theta_a, Za);
@@ -72,8 +68,13 @@ while theta_f ~= 0 && i <= 700
     delta_z(i) = delta_t * sind(theta_f) - delta_n * cosd(theta_f);
     
     % 更新累積位置
-    x_positions(i) = sum(delta_x(1:i));
-    z_positions(i) = sum(delta_z(1:i));
+    if i == 1
+       x_positions(1) = 0.01;
+       z_positions(1) = 0.01; 
+    else
+       x_positions(i) = x_positions(i-1) + delta_x(i);
+       z_positions(i) = z_positions(i-1) + delta_z(i);
+    end
     
     fprintf('delta_x(%d) = %f, delta_z(%d) = %f\n', i, delta_x(i), i, delta_z(i));
     
@@ -107,8 +108,8 @@ while theta_f ~= 0 && i <= 700
     % 更新參數
     theta_a = theta_a + delta_theta_a;
     theta_f = theta_f - delta_beta;
-    theta_as = theta_a - theta_s;
     theta_s = theta_s + delta_beta;
+    theta_as = theta_a - theta_s;
     Za = Za + delta_z(i);      
     i = i + 1; 
 end
@@ -116,7 +117,7 @@ end
 % 輸出結果
 if i > 10000
     disp('達到最大迭代次數');
-elseif theta_f <= 0
+elseif theta_f <= 0.01
     fprintf('theta_f = %f\n',theta_f);
     disp('計算完成：theta_f 達到或小於 0');
 end
@@ -147,4 +148,3 @@ if i > 1
 else
     disp('沒有足夠的數據來繪圖');
 end
-
